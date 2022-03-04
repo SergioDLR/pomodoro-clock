@@ -4,8 +4,10 @@ import Icon from "../utilities/Icon";
 import playImage from "../../assets/images/play-white.png";
 import pauseImage from "../../assets/images/pause-white.png";
 import fastForward from "../../assets/images/forward-white.png";
+import BellSound from "../../assets/sounds/Bellsound.mp3";
+const bellMusic = new Audio(BellSound);
 let tiempoDeInicio = Date.now();
-const Clock = ({ pomodoroDuration = 25, restDuration = 5 }) => {
+const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister }: any) => {
   let tiempoRestanteEnMs = pomodoroDuration * (60 * 1000);
   const [fin, setFin] = useState(tiempoDeInicio + tiempoRestanteEnMs);
   const [tiempoRestante, setTiempoRestante] = useState(tiempoRestanteEnMs);
@@ -24,13 +26,16 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5 }) => {
   const stop = () => {
     setPlaying(false);
     setTiempoRestante(tiempoRestanteEnMs);
+    setResting(false);
   };
 
   const endPomodoro = () => {
     if (tiempoRestante <= 1000) {
       pause();
-      setResting(true);
+      setResting(!resting);
       setTiempoRestante(restDuration * 60 * 1000);
+      bellMusic.play();
+      if (!resting) addNewToRegister();
     }
   };
 
