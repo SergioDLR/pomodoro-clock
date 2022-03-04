@@ -26,7 +26,7 @@ function Home() {
   };
 
   return (
-    <div className="bg-slate-700 h-screen flex items-center justify-center flex-row ">
+    <div className="bg-slate-700 h-screen flex items-center justify-center flex-row font-ubuntu">
       <div className="w-1/2">
         <RegisterRenderer register={register} text={textLanguaje} />
       </div>

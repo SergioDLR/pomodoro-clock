@@ -63,22 +63,18 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister }: an
   return (
     <div className="text-white text-center ">
       <div
-        className={`flex flex-row border-2 p-20 py-24 rounded-full m-auto max-w-min ${
+        className={`border-2 align-middle rounded-full m-auto w-1/2 h-96 flex justify-center ${
           resting ? "bg-green-600" : "bg-red-600"
         }`}
       >
-        <h1 className="text-2xl">
+        <p className="text-6xl m-auto ">
           {minutesRemaining < 10 && `0`}
-          {minutesRemaining}
-        </h1>
-        <h1 className="text-2xl">:</h1>
-        <h1 className="text-2xl">
-          {secondsRemaining < 10 && `0`}
+          {minutesRemaining} : {secondsRemaining < 10 && `0`}
           {secondsRemaining}
-        </h1>
+        </p>
       </div>
-      <Button name={pauseOrPlay()} action={pause} bgColor="bg-black"></Button>
-      <Button name={<Icon img={fastForward} />} action={stop} bgColor="bg-black"></Button>
+      <Button name={pauseOrPlay()} action={pause} bgColor="bg-black" />
+      <Button name={<Icon img={fastForward} />} action={stop} bgColor="bg-black" />
     </div>
   );
 };

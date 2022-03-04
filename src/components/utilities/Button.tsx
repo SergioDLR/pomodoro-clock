@@ -11,7 +11,7 @@ const Button = ({ name, action, bgColor = "bg-white", extraStyle = " ", onClickC
   return (
     <>
       <button
-        className={`p-5 rounded-full ${bgColor} ${extraStyle} ${onClickStyle}`}
+        className={`h-48 w-1/4 rounded-full ${bgColor} ${extraStyle} ${onClickStyle}`}
         onClick={() => {
           action();
           changeBgColor();
