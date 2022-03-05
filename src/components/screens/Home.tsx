@@ -13,7 +13,8 @@ if (userLang.substring(0, 2) === `es`) {
 }
 function Home() {
   const [register, setRegister] = useState<any>([]);
-
+  const [tPomodoro, setTPomodoro] = useState<any>(25);
+  const [tRest, setTRest] = useState<any>(5);
   const addPomodoroRegister = () => {
     const date = new Date();
     const today = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
@@ -36,15 +37,25 @@ function Home() {
       setRegister(registrosPomodoro);
     }
   }, []);
+  const saveValues = () => {
+    return;
+  };
+  useEffect(() => {
+    console.log(tPomodoro);
+  }, [tPomodoro, tRest]);
 
   return (
     <div className="bg-slate-700 h-screen flex items-center justify-center md:flex-row font-ubuntu flex-col-reverse">
-      <Modal text={textLanguage} />
       <div className="w-1/2">
         <RegisterRenderer register={register} text={textLanguage} />
       </div>
       <div className="w-1/2">
-        <Clock pomodoroDuration={0.1} restDuration={0.1} addNewToRegister={addPomodoroRegister} />
+        <Clock
+          pomodoroDuration={25}
+          restDuration={5}
+          textLanguage={textLanguage}
+          addNewToRegister={addPomodoroRegister}
+        />
       </div>
     </div>
   );

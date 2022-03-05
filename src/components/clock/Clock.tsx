@@ -5,17 +5,24 @@ import playImage from "../../assets/images/play-white.png";
 import pauseImage from "../../assets/images/pause-white.png";
 import fastForward from "../../assets/images/forward-white.png";
 import BellSound from "../../assets/sounds/Bellsound.mp3";
+import Modal from "../utilities/Modal";
 const bellMusic = new Audio(BellSound);
 let tiempoDeInicio = Date.now();
-const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister }: any) => {
+const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister, textLanguage }: any) => {
   let tiempoRestanteEnMs = pomodoroDuration * (60 * 1000);
+  const [pomodoroTime, setPomodoroTimer] = useState(pomodoroDuration);
+  const [restTime, setRestTimer] = useState(restDuration);
   const [fin, setFin] = useState(tiempoDeInicio + tiempoRestanteEnMs);
   const [tiempoRestante, setTiempoRestante] = useState(tiempoRestanteEnMs);
   const [isPlaying, setPlaying] = useState(false);
   const [resting, setResting] = useState(false);
-
+  const [modalShow, setShow] = useState("hidden");
   const calcularNuevoFinal = (fTimpo: number): number => {
     return fTimpo - Date.now();
+  };
+
+  const openModal = () => {
+    setShow("block");
   };
 
   const pause = () => {
@@ -29,13 +36,28 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister }: an
     setResting(false);
   };
 
+  const setPomodoroTime = (event: any) => {
+    setPlaying(false);
+    setPomodoroTimer(parseFloat(event.target.value));
+    setTiempoRestante(pomodoroTime * 60 * 1000);
+  };
+
+  const setRestTime = (event: any) => {
+    setPlaying(false);
+    setRestTimer(parseFloat(event.target.value));
+    setResting(false);
+  };
+
   const endPomodoro = () => {
     if (tiempoRestante <= 1000) {
       pause();
       setResting(!resting);
-      setTiempoRestante(restDuration * 60 * 1000);
+      setTiempoRestante(pomodoroTime * 60 * 1000);
       bellMusic.play();
-      if (!resting) addNewToRegister();
+      if (!resting) {
+        setTiempoRestante(restTime * 60 * 1000);
+        addNewToRegister();
+      }
     }
   };
 
@@ -60,6 +82,18 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister }: an
     return <Icon img={playImage} />;
   };
 
+  useEffect(() => {
+    setPlaying(false);
+    setPomodoroTimer(pomodoroTime);
+    setTiempoRestante(pomodoroTime * 60 * 1000);
+  }, [pomodoroTime]);
+
+  useEffect(() => {
+    setPlaying(false);
+    setRestTimer(restTime);
+    setResting(false);
+  }, [restTime]);
+
   return (
     <div className="text-white text-center ">
       <div
@@ -75,6 +109,23 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister }: an
       </div>
       <Button name={pauseOrPlay()} action={pause} bgColor="bg-black" />
       <Button name={<Icon img={fastForward} />} action={stop} bgColor="bg-black" />
+      <Button name={<Icon img={fastForward} />} action={openModal} bgColor="bg-black" />
+      <Modal show={modalShow}>
+        <div className="text-black">
+          <label htmlFor="">{textLanguage.cant || "place"}</label>
+          <input
+            type="number"
+            className="bg-gray-200  text-center rounded-md block w-full "
+            onChange={(event) => setPomodoroTime(event)}
+          />
+          <label htmlFor="">{textLanguage.restCant || "place"}</label>
+          <input
+            type="number"
+            className="bg-gray-200  text-center rounded-md block w-full "
+            onChange={(event) => setRestTime(event)}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };
