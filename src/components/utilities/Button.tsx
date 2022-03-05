@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-const Button = ({ name, action, bgColor = "bg-white", extraStyle = " ", onClickColor = "bg-blue-900" }: any) => {
+const Button = ({
+  name,
+  size = "h-36 w-36",
+  action,
+  bgColor = "bg-white",
+  extraStyle = " ",
+  onClickColor = "bg-blue-900",
+}: any) => {
   const [onClickStyle, setClickStyle] = useState("");
 
   const changeBgColor = () => {
@@ -11,7 +18,7 @@ const Button = ({ name, action, bgColor = "bg-white", extraStyle = " ", onClickC
   return (
     <>
       <button
-        className={`h-48 w-1/4 rounded-full ${bgColor} ${extraStyle} ${onClickStyle}`}
+        className={`${size} rounded-full ${bgColor} ${extraStyle} ${onClickStyle}`}
         onClick={() => {
           action();
           changeBgColor();

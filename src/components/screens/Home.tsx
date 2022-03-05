@@ -1,15 +1,15 @@
 import Clock from "../clock/Clock";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegisterRenderer from "../RegisterRenderer";
 import jsonEn from "../../assets/text/homeEn.json";
 import jsonEs from "../../assets/text/homeEs.json";
-
+import Modal from "../utilities/Modal";
 let userLang = navigator.language;
-let textLanguaje: any;
+let textLanguage: any;
 if (userLang.substring(0, 2) === `es`) {
-  textLanguaje = jsonEs;
+  textLanguage = jsonEs;
 } else {
-  textLanguaje = jsonEn;
+  textLanguage = jsonEn;
 }
 function Home() {
   const [register, setRegister] = useState<any>([]);
@@ -23,15 +23,28 @@ function Home() {
       hour,
     };
     setRegister([...register, newRegister]);
+    let oldItems = JSON.parse(localStorage.getItem("register") || "[]");
+    oldItems.push(newRegister);
+    localStorage.setItem("register", JSON.stringify(oldItems));
   };
 
+  useEffect(() => {
+    const oldPomodoros = localStorage.getItem("register") || "empty";
+
+    if (oldPomodoros != "empty") {
+      let registrosPomodoro = JSON.parse(oldPomodoros);
+      setRegister(registrosPomodoro);
+    }
+  }, []);
+
   return (
-    <div className="bg-slate-700 h-screen flex items-center justify-center flex-row font-ubuntu">
+    <div className="bg-slate-700 h-screen flex items-center justify-center md:flex-row font-ubuntu flex-col-reverse">
+      <Modal text={textLanguage} />
       <div className="w-1/2">
-        <RegisterRenderer register={register} text={textLanguaje} />
+        <RegisterRenderer register={register} text={textLanguage} />
       </div>
       <div className="w-1/2">
-        <Clock pomodoroDuration={25} restDuration={5} addNewToRegister={addPomodoroRegister} />
+        <Clock pomodoroDuration={0.1} restDuration={0.1} addNewToRegister={addPomodoroRegister} />
       </div>
     </div>
   );

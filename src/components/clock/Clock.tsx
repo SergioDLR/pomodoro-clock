@@ -63,7 +63,7 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister }: an
   return (
     <div className="text-white text-center ">
       <div
-        className={`border-2 align-middle rounded-full m-auto w-1/2 h-96 flex justify-center ${
+        className={`border-2 align-middle rounded-full m-auto w-56 h-56 lg:w-96  lg:h-96 flex justify-center ${
           resting ? "bg-green-600" : "bg-red-600"
         }`}
       >
