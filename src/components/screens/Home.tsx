@@ -41,15 +41,15 @@ function Home() {
     return;
   };
   useEffect(() => {
-    console.log(tPomodoro);
+    //
   }, [tPomodoro, tRest]);
 
   return (
-    <div className="bg-slate-700 h-screen flex items-center justify-center md:flex-row font-ubuntu flex-col-reverse">
+    <div className="bg-slate-700 h-fit min-h-screen  flex items-center justify-center md:flex-row font-ubuntu flex-col-reverse">
       <div className="w-1/2">
         <RegisterRenderer register={register} text={textLanguage} />
       </div>
-      <div className="w-1/2">
+      <div className="w-1/2 ">
         <Clock
           pomodoroDuration={25}
           restDuration={5}

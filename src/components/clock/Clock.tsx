@@ -4,6 +4,7 @@ import Icon from "../utilities/Icon";
 import playImage from "../../assets/images/play-white.png";
 import pauseImage from "../../assets/images/pause-white.png";
 import fastForward from "../../assets/images/forward-white.png";
+import settingsIcon from "../../assets/images/settings-white.png";
 import BellSound from "../../assets/sounds/Bellsound.mp3";
 import Modal from "../utilities/Modal";
 const bellMusic = new Audio(BellSound);
@@ -22,9 +23,13 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister, text
   };
 
   const openModal = () => {
+    setResting(false);
+    setPlaying(false);
     setShow("block");
   };
-
+  const closeShow = () => {
+    setShow("hidden");
+  };
   const pause = () => {
     setFin(Date.now() + tiempoRestante);
     setPlaying(!isPlaying);
@@ -32,20 +37,24 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister, text
 
   const stop = () => {
     setPlaying(false);
-    setTiempoRestante(tiempoRestanteEnMs);
+    setTiempoRestante(pomodoroTime * 60 * 1000);
     setResting(false);
   };
 
   const setPomodoroTime = (event: any) => {
     setPlaying(false);
-    setPomodoroTimer(parseFloat(event.target.value));
+    if (event.target.value > 0) setPomodoroTimer(parseFloat(event.target.value));
+    else setPomodoroTime(25);
+    setResting(false);
     setTiempoRestante(pomodoroTime * 60 * 1000);
   };
 
   const setRestTime = (event: any) => {
     setPlaying(false);
-    setRestTimer(parseFloat(event.target.value));
+    if (event.target.value > 0) setRestTimer(parseFloat(event.target.value));
+    else setPomodoroTime(25);
     setResting(false);
+    setTiempoRestante(pomodoroTime * 60 * 1000);
   };
 
   const endPomodoro = () => {
@@ -108,21 +117,33 @@ const Clock = ({ pomodoroDuration = 25, restDuration = 5, addNewToRegister, text
         </p>
       </div>
       <Button name={pauseOrPlay()} action={pause} bgColor="bg-black" />
-      <Button name={<Icon img={fastForward} />} action={stop} bgColor="bg-black" />
-      <Button name={<Icon img={fastForward} />} action={openModal} bgColor="bg-black" />
-      <Modal show={modalShow}>
+      <Button name={<Icon img={fastForward} />} action={stop} extraStyle={"ml-2"} bgColor="bg-black" />
+      <Button
+        name={<Icon img={settingsIcon} />}
+        size={"w-24 h-24"}
+        extraStyle={"ml-2"}
+        action={openModal}
+        bgColor="bg-black"
+      />
+      <Modal show={modalShow} updateShow={closeShow}>
         <div className="text-black">
           <label htmlFor="">{textLanguage.cant || "place"}</label>
           <input
             type="number"
             className="bg-gray-200  text-center rounded-md block w-full "
             onChange={(event) => setPomodoroTime(event)}
+            min={1}
+            placeholder="25"
+            max={999}
           />
           <label htmlFor="">{textLanguage.restCant || "place"}</label>
           <input
             type="number"
             className="bg-gray-200  text-center rounded-md block w-full "
             onChange={(event) => setRestTime(event)}
+            min={1}
+            max={999}
+            placeholder="5"
           />
         </div>
       </Modal>

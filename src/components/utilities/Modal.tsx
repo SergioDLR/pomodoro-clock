@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Button from "./Button";
-const Modal = ({ text, children, show }: any) => {
+const Modal = ({ text, children, show, updateShow }: any) => {
   const [visible, setVisible] = useState("hidden");
 
   const cerrar = () => {
     setVisible("hidden");
+    updateShow("hidden");
   };
   useEffect(() => {
     setVisible(show);
